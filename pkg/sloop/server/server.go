@@ -68,7 +68,7 @@ func RealMain() error {
 		BadgerEnableEventLogging: 		conf.BadgerEnableEventLogging,
 		BadgerNumOfCompactors:		   	conf.BadgerNumOfCompactors,
 		BadgerNumLevelZeroTables: 		conf.BadgerNumLevelZeroTables,
-		BadgerNumLevelZeroTablesStall:  conf.BadgerNumLevelZeroTablesStall,
+		BadgerNumLevelZeroTablesStall:	conf.BadgerNumLevelZeroTablesStall,
 		BadgerSyncWrites:				conf.BadgerSyncWrites,
 	}
 	db, err := untyped.OpenStore(factory, storeConfig)
