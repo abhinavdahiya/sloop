@@ -17,14 +17,18 @@ import (
 )
 
 type Config struct {
-	RootPath                 string
-	ConfigPartitionDuration  time.Duration
-	BadgerMaxTableSize       int64
-	BadgerKeepL0InMemory     bool
-	BadgerVLogFileSize       int64
-	BadgerVLogMaxEntries     uint
-	BadgerUseLSMOnlyOptions  bool
-	BadgerEnableEventLogging bool
+	RootPath                 		string
+	ConfigPartitionDuration  		time.Duration
+	BadgerMaxTableSize       		int64
+	BadgerKeepL0InMemory     		bool
+	BadgerVLogFileSize       		int64
+	BadgerVLogMaxEntries     		uint
+	BadgerUseLSMOnlyOptions  		bool
+	BadgerEnableEventLogging 		bool
+	BadgerNumOfCompactors    		int
+	BadgerNumLevelZeroTables 		int
+	BadgerNumLevelZeroTablesStall   int
+	BadgerSyncWrites				bool
 }
 
 func OpenStore(factory badgerwrap.Factory, config *Config) (badgerwrap.DB, error) {
@@ -59,6 +63,20 @@ func OpenStore(factory badgerwrap.Factory, config *Config) (badgerwrap.DB, error
 	if config.BadgerVLogMaxEntries != 0 {
 		opts = opts.WithValueLogMaxEntries(uint32(config.BadgerVLogMaxEntries))
 	}
+
+	if config.BadgerNumOfCompactors != 0 {
+		opts = opts.WithNumCompactors(config.BadgerNumOfCompactors)
+	}
+
+	if config.BadgerNumLevelZeroTables != 0 {
+		opts = opts.WithNumLevelZeroTables(config.BadgerNumLevelZeroTables)
+	}
+
+	if config.BadgerNumLevelZeroTablesStall != 0 {
+		opts = opts.WithNumLevelZeroTablesStall(config.BadgerNumLevelZeroTablesStall)
+	}
+
+	opts.WithSyncWrites(config.BadgerSyncWrites)
 
 	db, err := factory.Open(opts)
 	if err != nil {
